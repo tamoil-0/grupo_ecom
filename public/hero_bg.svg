@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0D1B2A"/>
+      <stop offset="50%" stop-color="#1A2E45"/>
+      <stop offset="100%" stop-color="#1B4F8A"/>
+    </linearGradient>
+    <linearGradient id="mountains" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A2E45"/>
+      <stop offset="100%" stop-color="#07111B"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="80%" cy="30%">
+      <stop offset="0%" stop-color="#F5A623" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#F5A623" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#sun)"/>
+
+  <!-- Estrellas/partículas -->
+  <g fill="#FFFFFF" opacity="0.5">
+    <circle cx="200" cy="150" r="1"/>
+    <circle cx="450" cy="80" r="1.5"/>
+    <circle cx="700" cy="200" r="1"/>
+    <circle cx="1100" cy="120" r="1.2"/>
+    <circle cx="1400" cy="180" r="1"/>
+    <circle cx="1700" cy="100" r="1.5"/>
+    <circle cx="1800" cy="250" r="1"/>
+    <circle cx="300" cy="300" r="0.8"/>
+    <circle cx="900" cy="350" r="1"/>
+  </g>
+
+  <!-- Montañas lejanas -->
+  <polygon points="0,700 200,500 380,620 560,440 740,580 920,460 1100,600 1280,480 1460,580 1640,460 1800,540 1920,500 1920,1080 0,1080" fill="url(#mountains)" opacity="0.8"/>
+
+  <!-- Montañas cercanas -->
+  <polygon points="0,820 150,680 300,780 500,620 650,750 850,640 1050,790 1250,660 1450,780 1650,680 1850,800 1920,720 1920,1080 0,1080" fill="#07111B"/>
+
+  <!-- Torre de transmisión 1 -->
+  <g transform="translate(400,500)" stroke="#8A9BB0" stroke-width="2" fill="none" opacity="0.7">
+    <!-- Estructura -->
+    <line x1="50" y1="380" x2="-30" y2="0"/>
+    <line x1="-50" y1="380" x2="30" y2="0"/>
+    <line x1="-30" y1="0" x2="30" y2="0"/>
+    <line x1="-25" y1="50" x2="25" y2="50"/>
+    <line x1="-20" y1="100" x2="20" y2="100"/>
+    <line x1="-15" y1="150" x2="15" y2="150"/>
+    <line x1="-10" y1="200" x2="10" y2="200"/>
+    <line x1="-5" y1="250" x2="5" y2="250"/>
+    <line x1="0" y1="300" x2="0" y2="380"/>
+    <!-- Brazos -->
+    <line x1="-80" y1="30" x2="80" y2="30"/>
+    <line x1="-60" y1="80" x2="60" y2="80"/>
+    <line x1="-100" y1="-20" x2="100" y2="-20"/>
+    <!-- Aisladores -->
+    <circle cx="-80" cy="35" r="3" fill="#F5A623"/>
+    <circle cx="0" cy="35" r="3" fill="#F5A623"/>
+    <circle cx="80" cy="35" r="3" fill="#F5A623"/>
+    <circle cx="-100" cy="-15" r="3" fill="#F5A623"/>
+    <circle cx="100" cy="-15" r="3" fill="#F5A623"/>
+  </g>
+
+  <!-- Torre 2 -->
+  <g transform="translate(1300,580)" stroke="#8A9BB0" stroke-width="1.5" fill="none" opacity="0.5">
+    <line x1="40" y1="280" x2="-20" y2="0"/>
+    <line x1="-40" y1="280" x2="20" y2="0"/>
+    <line x1="-20" y1="0" x2="20" y2="0"/>
+    <line x1="-15" y1="50" x2="15" y2="50"/>
+    <line x1="-10" y1="100" x2="10" y2="100"/>
+    <line x1="-5" y1="150" x2="5" y2="150"/>
+    <line x1="0" y1="200" x2="0" y2="280"/>
+    <line x1="-60" y1="30" x2="60" y2="30"/>
+    <line x1="-80" y1="-20" x2="80" y2="-20"/>
+  </g>
+
+  <!-- Cables -->
+  <g stroke="#1B4F8A" stroke-width="1.2" fill="none" opacity="0.6">
+    <path d="M 400,470 Q 850,580 1300,560"/>
+    <path d="M 400,520 Q 850,640 1300,610"/>
+    <path d="M 480,470 Q 900,580 1380,560"/>
+  </g>
+</svg>

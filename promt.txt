@@ -1,0 +1,831 @@
+================================================================================
+  PROMPT COMPLETO — LANDING PAGE: GROUP EMG PERÚ
+  Framework : Next.js 14 (App Router)
+  Estilos   : Tailwind CSS v3 + clases personalizadas en tailwind.config.js
+  Animaciones: Framer Motion v11
+  Íconos    : Lucide React
+  Fuentes   : next/font (Google Fonts — Bebas Neue, Barlow Condensed, DM Sans, JetBrains Mono)
+  Imágenes  : next/image (optimización automática)
+  Formulario: React Hook Form + Zod (validación)
+  Nivel     : Producción · Empresarial · Minimalista Premium · Animado
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+0. CONTEXTO DE LA EMPRESA
+────────────────────────────────────────────────────────────────────────────────
+
+Empresa   : GROUP EMG PERÚ EIRL
+Slogan    : "Ingeniería que Conecta Energía y Futuro"
+Sector    : Ingeniería eléctrica, transmisión de energía, infraestructura
+Ubicación : Jr. San Francisco Mza. F Lote. 2, Urb. Santa Juana – Juliaca, Puno, Perú
+Teléfonos : 900 757 575 / 996 600 288
+Email     : groupemgperu@gmail.com
+RUC       : 20610604723
+Rep. Legal: Edwar Mamani Gomez  (Edwar.Mgomez@gmail.com)
+
+Clientes actuales: Electro Puno S.A.A. · REDESUR (Red Eléctrica del Sur)
+                   CD (logo engranaje) · ECOING Contratistas Generales S.R.L.
+
+El PDF brochure (GROUP_EMG_PERU.pdf) y el logo (logo_emg.png recortado sin fondo)
+están en la MISMA carpeta que este archivo prompt.
+El logo es el ícono con cuatro cuadrantes (azul oscuro, azul claro, amarillo/naranja,
+gris plata) + el texto "GROUP EMG PERÚ" en azul marino / dorado.
+
+────────────────────────────────────────────────────────────────────────────────
+1. PALETA DE COLORES (extraída del brochure PDF)
+────────────────────────────────────────────────────────────────────────────────
+
+Definir en tailwind.config.js → theme.extend.colors:
+
+  colors: {
+    navy:        '#0D1B2A',   // Azul marino muy oscuro — fondo principal
+    'navy-mid':  '#1A2E45',   // Azul navy medio — secciones alternadas
+    'navy-dark': '#07111B',   // Más oscuro — footer
+    blue:        '#1B4F8A',   // Azul corporativo — botones, acentos
+    'blue-light':'#2D7DD2',   // Azul brillante — hover, highlights
+    gold:        '#F5A623',   // Dorado/naranja vibrante — CTA, detalles
+    'gold-light':'#FFB84D',   // Dorado claro — hover gold
+    accent:      '#FF6B2B',   // Naranja eléctrico — badges, viñetas
+    'gray-light':'#F0F4F8',   // Fondo de secciones claras
+    'gray-text': '#8A9BB0',   // Texto secundario sobre oscuro
+  }
+
+También extender en tailwind.config.js:
+  backgroundImage: {
+    'gradient-hero': 'linear-gradient(135deg, #0D1B2A 0%, #1A2E45 50%, #0D1B2A 100%)',
+    'gradient-gold': 'linear-gradient(90deg, #F5A623, #FF6B2B)',
+    'gradient-blue': 'linear-gradient(135deg, #1B4F8A, #2D7DD2)',
+  }
+  fontFamily: {
+    display: ['var(--font-bebas)', 'sans-serif'],
+    condensed: ['var(--font-barlow)', 'sans-serif'],
+    body: ['var(--font-dmsans)', 'sans-serif'],
+    mono: ['var(--font-jetbrains)', 'monospace'],
+  }
+
+────────────────────────────────────────────────────────────────────────────────
+2. TIPOGRAFÍA
+────────────────────────────────────────────────────────────────────────────────
+
+Cargar fuentes con next/font/google en app/layout.tsx:
+
+  import { Bebas_Neue, Barlow_Condensed, DM_Sans, JetBrains_Mono } from 'next/font/google'
+
+  const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-bebas', subsets: ['latin'] })
+  const barlowCondensed = Barlow_Condensed({ weight: ['400','600'], variable: '--font-barlow', subsets: ['latin'] })
+  const dmSans = DM_Sans({ weight: ['300','400','500'], variable: '--font-dmsans', subsets: ['latin'] })
+  const jetbrainsMono = JetBrains_Mono({ weight: ['400','700'], variable: '--font-jetbrains', subsets: ['latin'] })
+
+  // Aplicar en <body> className:
+  `${bebasNeue.variable} ${barlowCondensed.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-body`
+
+Clases Tailwind para tipografía (usar en componentes):
+  - Títulos sección : font-display text-6xl lg:text-7xl tracking-wider
+  - Subtítulos cards: font-condensed font-semibold text-xl uppercase
+  - Cuerpo párrafos : font-body font-light text-base leading-relaxed
+  - Estadísticas    : font-mono font-bold text-6xl text-gold
+
+────────────────────────────────────────────────────────────────────────────────
+3. ESTRUCTURA DEL PROYECTO — Next.js App Router
+────────────────────────────────────────────────────────────────────────────────
+
+Estructura de carpetas:
+
+  emg-peru/
+  ├── app/
+  │   ├── layout.tsx          ← RootLayout con fuentes, metadata SEO
+  │   ├── page.tsx            ← Página principal (importa todas las secciones)
+  │   └── globals.css         ← @tailwind base/components/utilities + keyframes custom
+  ├── components/
+  │   ├── Navbar.tsx
+  │   ├── sections/
+  │   │   ├── Hero.tsx
+  │   │   ├── QuienesSomos.tsx
+  │   │   ├── MisionVision.tsx
+  │   │   ├── Servicios.tsx
+  │   │   ├── PorQueElegirnos.tsx
+  │   │   ├── Estadisticas.tsx
+  │   │   ├── Clientes.tsx
+  │   │   ├── Contacto.tsx
+  │   │   └── Footer.tsx
+  │   └── ui/
+  │       ├── SectionLabel.tsx
+  │       ├── ServiceCard.tsx
+  │       ├── PillarCard.tsx
+  │       └── StatCounter.tsx
+  ├── public/
+  │   ├── logo_emg.png
+  │   ├── hero_bg.jpg
+  │   ├── workers.jpg
+  │   ├── tower.jpg
+  │   ├── logo_electropuno.png
+  │   ├── logo_redesur.png
+  │   ├── logo_cd.png
+  │   └── logo_ecoing.png
+  ├── tailwind.config.ts
+  ├── next.config.ts
+  └── package.json
+
+Dependencias a instalar (package.json):
+  "dependencies": {
+    "next": "14.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "framer-motion": "^11.x",
+    "lucide-react": "^0.383.0",
+    "react-hook-form": "^7.x",
+    "zod": "^3.x",
+    "@hookform/resolvers": "^3.x"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.x",
+    "autoprefixer": "^10.x",
+    "postcss": "^8.x",
+    "typescript": "^5.x",
+    "@types/react": "^18.x",
+    "@types/node": "^20.x"
+  }
+
+globals.css (además de @tailwind directives):
+  Keyframes custom para efectos que Tailwind no trae de serie:
+    @keyframes float      { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+    @keyframes marquee    { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }
+    @keyframes bounce-slow{ 0%,100% { transform: translateY(0) } 50% { transform: translateY(8px) } }
+    @keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.4) }
+                            50% { box-shadow: 0 0 0 12px rgba(245,166,35,0) } }
+  Extender en tailwind.config.ts → theme.extend.animation:
+    'float'       : 'float 4s ease-in-out infinite',
+    'marquee'     : 'marquee 20s linear infinite',
+    'bounce-slow' : 'bounce-slow 2s ease-in-out infinite',
+    'pulse-gold'  : 'pulse-gold 2s ease-in-out infinite',
+
+La página es un single-page con scroll suave.
+Orden de secciones en page.tsx:
+
+  [1] <Navbar />
+  [2] <Hero />
+  [3] <QuienesSomos />
+  [4] <MisionVision />
+  [5] <Servicios />
+  [6] <PorQueElegirnos />
+  [7] <Estadisticas />
+  [8] <Clientes />
+  [9] <Contacto />
+  [10] <Footer />
+
+────────────────────────────────────────────────────────────────────────────────
+4. COMPONENTE: Navbar.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+'use client' — necesita estado para scroll y menú mobile.
+
+Estado:
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect: window.addEventListener('scroll', () => setScrolled(window.scrollY > 80))
+
+Clases Tailwind base:
+  <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-400
+    ${scrolled ? 'bg-navy/95 backdrop-blur-md shadow-lg shadow-black/30' : 'bg-transparent'}">
+
+Contenido interno (max-w-7xl mx-auto px-6 lg:px-8 · flex items-center justify-between · h-20):
+
+  LOGO: <Image src="/logo_emg.png" alt="Group EMG Perú" width={140} height={44}
+               className="object-contain" priority />
+
+  NAV LINKS (hidden md:flex · gap-8):
+    Links: Inicio · Servicios · Nosotros · Clientes · Contacto
+    Clases: font-body text-sm uppercase tracking-widest text-white/80
+            hover:text-gold transition-colors duration-300 relative
+            after:content-[''] after:absolute after:bottom-0 after:left-0
+            after:h-[2px] after:bg-gold after:w-0 hover:after:w-full
+            after:transition-all after:duration-300
+
+  BOTÓN CTA: className="bg-gradient-gold text-white font-condensed font-semibold
+              text-sm uppercase tracking-widest px-6 py-3 rounded
+              hover:scale-105 hover:shadow-lg hover:shadow-gold/30
+              transition-all duration-300"
+
+  HAMBURGER (md:hidden):
+    Framer Motion: <AnimatePresence> para drawer lateral
+    Drawer: fixed inset-y-0 right-0 w-72 bg-navy z-50
+            motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25 }}
+
+────────────────────────────────────────────────────────────────────────────────
+5. COMPONENTE: Hero.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+'use client' — usa Framer Motion y scroll parallax.
+
+LAYOUT: <section className="relative h-screen flex items-center overflow-hidden">
+
+FONDO (capas absolutas):
+  Capa 0: <div className="absolute inset-0 bg-navy" />
+  Capa 1: <Image src="/hero_bg.jpg" alt="Torres de transmisión en montaña"
+                 fill className="object-cover object-center opacity-30" priority />
+  Capa 2: <div className="absolute inset-0 bg-gradient-to-r
+                from-navy/95 via-navy/60 to-transparent" />
+  Capa 3 (grid SVG): <div className="absolute inset-0 opacity-[0.04]"
+                          style={{ backgroundImage: 'url(/grid-pattern.svg)' }} />
+  Capa 4 (chevron decorativo): <span className="absolute top-20 right-10
+                                     text-[300px] font-display text-gold/10
+                                     select-none pointer-events-none">›</span>
+
+PARALLAX: useScroll() + useTransform() de Framer Motion
+  const { scrollY } = useScroll()
+  const bgY = useTransform(scrollY, [0, 600], ['0%', '20%'])
+  Aplicar en la Capa 1 con style={{ y: bgY }}
+
+CONTENIDO (motion.div · relative z-10 · max-w-2xl · ml-[8%]):
+
+  BADGE:
+    <motion.div initial={{ opacity:0, y:-20 }} animate={{ opacity:1, y:0 }}
+                transition={{ delay:0.2, duration:0.6 }}
+                className="inline-flex items-center gap-2 border border-gold/40
+                           bg-gold/10 text-gold text-sm font-body px-4 py-2
+                           rounded-full mb-8">
+      ⚡ Ingeniería Eléctrica de Alta Tensión
+    </motion.div>
+
+  TÍTULO (3 líneas · motion.div con stagger):
+    variants staggerChildren · delayChildren: 0.4
+    Cada línea: <motion.span variants={slideInLeft}>
+    "CONECTAMOS" → className="text-white"
+    "ENERGÍA"    → className="bg-gradient-gold bg-clip-text text-transparent"
+    "Y FUTURO"   → className="text-white"
+    className base: "block font-display text-7xl lg:text-9xl leading-none"
+
+  SUBTÍTULO:
+    <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1 }}
+              className="font-body font-light text-lg text-gray-text max-w-md mt-6">
+
+  BOTONES CTA:
+    <motion.div className="flex flex-wrap gap-4 mt-10" ...fadeInUp delay:1.2>
+      Primario: className="bg-gradient-gold text-white font-condensed font-semibold
+                           uppercase tracking-widest px-9 py-4 rounded-md
+                           hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/40
+                           transition-all duration-300"
+      Secundario: className="border-2 border-white text-white font-condensed
+                              font-semibold uppercase tracking-widest px-9 py-4 rounded-md
+                              hover:bg-white hover:text-navy transition-all duration-300"
+
+  SCROLL ARROW:
+    <motion.div animate={{ y:[0,8,0] }} transition={{ repeat:Infinity, duration:2 }}
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gold/70">
+      <ChevronDown size={32} /> (Lucide React)
+
+TARJETA FLOTANTE (esquina inferior derecha):
+  <motion.div animate={{ y:[0,-12,0] }} transition={{ repeat:Infinity, duration:4 }}
+              className="absolute bottom-16 right-[5%] backdrop-blur-xl
+                         bg-white/5 border border-gold/30 rounded-xl p-6 text-center">
+    <span className="font-display text-5xl text-gold">10+</span>
+    <p className="font-body text-sm text-gray-text mt-1">Años de Experiencia</p>
+
+────────────────────────────────────────────────────────────────────────────────
+6. COMPONENTE: QuienesSomos.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+'use client' — Framer Motion scroll animations.
+Usar useInView de framer-motion para activar animaciones al hacer scroll.
+
+<section id="nosotros" className="bg-gray-light py-24 lg:py-32 scroll-mt-20">
+  <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+
+COLUMNA IZQUIERDA — Visual:
+  <motion.div className="relative" initial={{ opacity:0, x:-60 }}
+              whileInView={{ opacity:1, x:0 }} viewport={{ once:true }}
+              transition={{ duration:0.8 }}>
+    Imagen principal: <Image src="/workers.jpg" fill className="rounded-xl object-cover
+                             shadow-2xl shadow-navy/30" />
+    Imagen secundaria: posición absoluta · className="absolute -bottom-8 -right-8
+                       w-1/2 rounded-lg border-4 border-white shadow-xl object-cover"
+    Badge flotante: className="absolute -top-4 -left-4 bg-navy text-white
+                               font-condensed font-semibold text-sm uppercase
+                               tracking-widest px-4 py-2 border border-gold rounded"
+
+COLUMNA DERECHA — Texto:
+  <motion.div initial={{ opacity:0, x:60 }} whileInView={{ opacity:1, x:0 }}
+              viewport={{ once:true }} transition={{ duration:0.8, delay:0.2 }}>
+    <SectionLabel>— Quiénes Somos</SectionLabel>
+    <h2 className="font-display text-5xl lg:text-6xl text-navy leading-none mt-2">
+      Referentes en<br/>Ingeniería Eléctrica
+    </h2>
+    <div className="w-16 h-1 bg-gradient-gold rounded mt-6 mb-6" />
+    <p className="font-body font-normal text-base text-navy/70 leading-relaxed">
+      GROUP EMG PERÚ EIRL nace con la visión...
+    </p>
+    3 íconos mini (flex · gap-6 · mt-8):
+      <Zap /> Alta Tensión
+      <Building2 /> Gran Envergadura
+      <ShieldCheck /> Certificados
+      className ícono: "text-gold w-5 h-5"
+      className texto: "font-condensed font-semibold text-sm text-navy uppercase"
+
+────────────────────────────────────────────────────────────────────────────────
+7. COMPONENTE: MisionVision.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+<section id="filosofia" className="bg-navy py-24 lg:py-32 scroll-mt-20">
+
+Header centrado:
+  <SectionLabel className="text-center">— Nuestra Filosofía</SectionLabel>
+  <h2 className="font-display text-6xl lg:text-7xl text-white text-center mt-2">
+    MISIÓN & VISIÓN
+  </h2>
+
+2 cards (grid lg:grid-cols-2 gap-8 mt-16):
+
+  CARD MISIÓN:
+    <motion.div whileInView={{ opacity:1, x:0 }} initial={{ opacity:0, x:-40 }}
+                viewport={{ once:true }} transition={{ duration:0.7 }}
+                className="bg-white/[0.04] border-l-4 border-gold rounded-r-xl p-10
+                           hover:bg-white/[0.07] hover:border-blue-light
+                           transition-all duration-300 group">
+      <Target className="text-gold w-12 h-12 mb-5 group-hover:scale-110 transition-transform" />
+      (Lucide React icon)
+      <h3 className="font-condensed font-semibold text-gold text-2xl uppercase mb-4">
+        Misión
+      </h3>
+      <p className="font-body font-light text-gray-text leading-relaxed">
+        Brindar servicios especializados de ingeniería...
+      </p>
+
+  CARD VISIÓN: misma estructura · border-blue-light · ícono <Eye />
+    hover: border-gold
+    <motion.div transition={{ delay: 0.2 }}>
+
+Animación de entrada: stagger 0.2s entre ambas cards
+
+────────────────────────────────────────────────────────────────────────────────
+8. COMPONENTE: Servicios.tsx + ServiceCard.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+<section id="servicios" className="bg-gradient-to-b from-navy to-navy-mid
+                                    py-24 lg:py-32 scroll-mt-20">
+
+Header centrado igual al patrón anterior.
+
+Array de servicios (definir como const en el mismo archivo o en /data/services.ts):
+  [
+    { id: '01', icon: Zap,         title: 'Ingeniería Electromecánica' },
+    { id: '02', icon: Cable,       title: 'Redes Eléctricas Aéreas y Subterráneas' },
+    { id: '03', icon: Tower,       title: 'Montaje de Torres de Transmisión' },
+    { id: '04', icon: Unplug,      title: 'Tendido de Líneas de Transmisión' },
+    { id: '05', icon: Cpu,         title: 'Subestaciones Alta/Extra Alta Tensión' },
+    { id: '06', icon: Route,       title: 'Construcción de Accesos y Carreteras' },
+    { id: '07', icon: Settings,    title: 'Montaje de Transformadores de Potencia' },
+    { id: '08', icon: HardHat,     title: 'Construcción de Obra Civil en General' },
+  ]
+  (Todos íconos de Lucide React)
+
+Grid: className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+                  gap-6 mt-16"
+
+ServiceCard.tsx:
+  Props: { id, Icon, title, index }
+  <motion.div
+    initial={{ opacity:0, y:40 }}
+    whileInView={{ opacity:1, y:0 }}
+    viewport={{ once:true }}
+    transition={{ duration:0.5, delay: index * 0.07 }}
+    whileHover={{ y:-8, transition:{ duration:0.25 } }}
+    className="relative bg-white/[0.03] border border-white/[0.08] rounded-2xl p-8
+               overflow-hidden cursor-pointer group
+               hover:bg-gold/[0.06] hover:border-gold/40
+               hover:shadow-2xl hover:shadow-black/40
+               transition-colors duration-350">
+
+    Número: <span className="font-mono text-xs text-gold/50 tracking-widest">{id}</span>
+    Ícono: <Icon className="text-gold w-12 h-12 mt-3 group-hover:scale-110
+                            transition-transform duration-300" />
+    Línea: <div className="h-[2px] bg-gradient-gold mt-4 w-10
+                           group-hover:w-full transition-all duration-400 rounded" />
+    Título: <h3 className="font-condensed font-semibold text-white text-xl
+                            uppercase mt-4 leading-tight">{title}</h3>
+
+    Decoración esquina:
+    <span className="absolute bottom-4 right-4 font-display text-8xl text-gold/0
+                     group-hover:text-gold/10 transition-colors duration-300
+                     select-none pointer-events-none">›</span>
+
+────────────────────────────────────────────────────────────────────────────────
+9. COMPONENTE: PorQueElegirnos.tsx + PillarCard.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+<section className="bg-gray-light py-24 lg:py-32">
+
+Pilares como array en /data/pillars.ts:
+  [
+    { icon: ShieldHeart, title: 'Seguridad y Salud',       color: 'gold',       desc: '...' },
+    { icon: Leaf,        title: 'Medio Ambiente',          color: 'blue-light', desc: '...' },
+    { icon: Users,       title: 'Participación y Consulta',color: 'gold',       desc: '...' },
+    { icon: Star,        title: 'Calidad',                 color: 'blue-light', desc: '...' },
+    { icon: Scale,       title: 'Normativa Legal',         color: 'gold',       desc: '...' },
+  ]
+
+Grid: className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mt-16"
+
+PillarCard.tsx:
+  <motion.div
+    initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }}
+    viewport={{ once:true }} transition={{ delay: index * 0.1 }}
+    whileHover={{ y:-6 }}
+    className="bg-white rounded-2xl p-8 text-center shadow-md shadow-navy/10
+               border-t-4 ${colorClass}
+               hover:shadow-xl hover:shadow-navy/20 transition-all duration-300">
+    <Icon className="w-14 h-14 mx-auto mb-4 ${iconColor}" />
+    <h3 className="font-condensed font-semibold text-navy text-lg uppercase mb-3">{title}</h3>
+    <p className="font-body text-sm text-navy/60 leading-relaxed">{desc}</p>
+
+  colorClass alternado: border-gold / border-blue-light
+
+────────────────────────────────────────────────────────────────────────────────
+10. COMPONENTE: Estadisticas.tsx + StatCounter.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+<section className="bg-gradient-to-br from-navy via-navy-mid to-navy py-20">
+
+4 stats en grid (grid grid-cols-2 lg:grid-cols-4 · divide-x divide-white/10):
+
+Stats data:
+  [
+    { value: 10,  suffix: '+', label: 'Años de Experiencia' },
+    { value: 500, suffix: '+', label: 'Proyectos Ejecutados' },
+    { value: 8,   suffix: '',  label: 'Servicios Especializados' },
+    { value: 100, suffix: '%', label: 'Compromiso con la Calidad' },
+  ]
+
+StatCounter.tsx ('use client'):
+  Props: { value: number, suffix: string, label: string }
+  Usar useInView + useMotionValue + useEffect para el contador:
+
+  const count = useMotionValue(0)
+  const ref = useRef()
+  const isInView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (isInView) {
+      animate(count, value, { duration: 2, ease: 'easeOut' })
+    }
+  }, [isInView])
+
+  const displayCount = useTransform(count, (v) => Math.round(v))
+
+  <div ref={ref} className="text-center py-12 px-6">
+    <div className="font-mono font-bold text-6xl lg:text-7xl text-gold">
+      <motion.span>{displayCount}</motion.span>{suffix}
+    </div>
+    <p className="font-body text-sm text-gray-text uppercase tracking-widest mt-3">{label}</p>
+
+Fondo decorativo (SVG de líneas de voltaje en diagonal · absolute · opacity-5):
+  SVG con path de zigzag eléctrico, stroke gold, strokeWidth 1
+
+────────────────────────────────────────────────────────────────────────────────
+11. COMPONENTE: Clientes.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+<section className="bg-gray-light py-20">
+
+Header centrado igual al patrón anterior.
+
+Marquee infinito — implementar con CSS puro en globals.css:
+  @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+  <div className="overflow-hidden mt-14 relative">
+    Fade edges (::before y ::after con gradient to-r from-gray-light):
+    <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r
+                    from-gray-light to-transparent z-10 pointer-events-none" />
+    <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l
+                    from-gray-light to-transparent z-10 pointer-events-none" />
+
+    <div className="flex gap-20 items-center animate-marquee
+                    hover:[animation-play-state:paused] w-max">
+      (logos duplicados x2 para loop perfecto)
+      [logo1, logo2, logo3, logo4, logo1, logo2, logo3, logo4]
+
+      Cada logo: <Image src="/logo_xxx.png" width={140} height={60}
+                        alt="Cliente" className="object-contain grayscale
+                        opacity-50 hover:grayscale-0 hover:opacity-100
+                        transition-all duration-300" />
+
+────────────────────────────────────────────────────────────────────────────────
+12. COMPONENTE: Contacto.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+'use client' — React Hook Form + Zod
+
+Validación con Zod:
+  const contactSchema = z.object({
+    nombre:   z.string().min(2, 'Nombre requerido'),
+    empresa:  z.string().optional(),
+    email:    z.string().email('Email inválido'),
+    telefono: z.string().min(7, 'Teléfono inválido'),
+    servicio: z.string().min(1, 'Selecciona un servicio'),
+    mensaje:  z.string().min(10, 'Mensaje muy corto'),
+  })
+
+Hook Form:
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    resolver: zodResolver(contactSchema)
+  })
+  onSubmit: async (data) => { /* fetch a API route o emailjs */ }
+
+<section id="contacto" className="bg-navy py-24 lg:py-32 scroll-mt-20">
+  <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-[55fr_45fr] gap-16">
+
+COLUMNA IZQUIERDA:
+  <SectionLabel>— Hablemos</SectionLabel>
+  <h2 className="font-display text-6xl lg:text-7xl text-white">CONTÁCTANOS</h2>
+  <p className="font-body text-gray-text mt-6 leading-relaxed max-w-md">...</p>
+
+  Datos de contacto (flex flex-col gap-5 mt-10):
+    Cada dato: className="flex items-start gap-4"
+    Ícono: <MapPin className="text-gold w-5 h-5 mt-0.5 flex-shrink-0" />
+    Texto: className="font-body text-sm text-gray-text"
+
+COLUMNA DERECHA — Formulario:
+  <motion.form onSubmit={handleSubmit(onSubmit)}
+    className="bg-white/[0.04] border border-white/10 backdrop-blur-xl
+               rounded-2xl p-10 space-y-5">
+
+  Clases para inputs:
+    className="w-full bg-white/[0.06] border border-white/15 rounded-lg
+               px-5 py-4 text-white font-body text-sm placeholder:text-gray-text
+               focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none
+               transition-all duration-200"
+
+  Select (tipo de servicio): mismo estilo + options de los 8 servicios
+    className="... appearance-none cursor-pointer"
+
+  Textarea: rows={4} · mismo estilo · resize-none
+
+  Error messages:
+    {errors.campo && <p className="text-accent text-xs mt-1">{errors.campo.message}</p>}
+
+  Botón Submit:
+    <button type="submit" disabled={isSubmitting}
+            className="w-full bg-gradient-gold text-white font-condensed font-semibold
+                       text-lg uppercase tracking-widest py-5 rounded-lg
+                       hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gold/40
+                       disabled:opacity-60 disabled:cursor-not-allowed
+                       transition-all duration-300">
+      {isSubmitting ? 'Enviando...' : 'ENVIAR CONSULTA'}
+
+  Nota: <p className="text-center font-body text-xs text-gray-text mt-3">
+           💡 Respuesta en menos de 24 horas</p>
+
+────────────────────────────────────────────────────────────────────────────────
+13. COMPONENTE: Footer.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Link from 'next/link' · import Image from 'next/image'
+
+<footer className="bg-navy-dark pt-16 pb-8">
+  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+    Grid superior: className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12
+                              border-b border-white/10"
+
+    COL 1 — MARCA:
+      <Image src="/logo_emg.png" width={160} height={50} alt="Group EMG Perú"
+             className="object-contain" />
+      <p className="font-body italic text-sm text-gray-text mt-4 max-w-xs">
+        Ingeniería que Conecta Energía y Futuro
+      </p>
+      <div className="h-[3px] w-10 bg-gradient-gold rounded mt-4" />
+
+    COL 2 — NAVEGACIÓN:
+      <h4 className="font-condensed font-semibold text-gold text-sm uppercase tracking-widest mb-5">
+        Navegación
+      </h4>
+      {navLinks.map(link =>
+        <Link href={link.href} className="block font-body text-sm text-gray-text
+                                          hover:text-gold transition-colors duration-200 mb-2">
+          {link.label}
+        </Link>}
+
+    COL 3 — CONTACTO:
+      Título igual · ícono + texto por dato
+
+  Barra inferior: className="flex flex-col sm:flex-row justify-between items-center
+                              gap-3 pt-8 text-xs font-body text-gray-text/60"
+    <span>© 2025 Group EMG Perú EIRL. Todos los derechos reservados.</span>
+    <span>RUC: 20610604723</span>
+
+────────────────────────────────────────────────────────────────────────────────
+14. ANIMACIONES — FRAMER MOTION (patrones reutilizables)
+────────────────────────────────────────────────────────────────────────────────
+
+Crear /lib/animations.ts con variants reutilizables:
+
+  export const fadeInUp = {
+    hidden:  { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+  }
+  export const fadeInLeft = {
+    hidden:  { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } }
+  }
+  export const fadeInRight = {
+    hidden:  { opacity: 0, x: 60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } }
+  }
+  export const staggerContainer = {
+    hidden:  {},
+    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+  }
+
+Uso estándar en cada sección:
+  <motion.div variants={fadeInUp} initial="hidden"
+              whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+
+Scroll progress bar (opcional, 'use client' en layout.tsx):
+  const { scrollYProgress } = useScroll()
+  <motion.div style={{ scaleX: scrollYProgress }}
+              className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-gold
+                         origin-left z-[9999]" />
+
+Cursor personalizado (solo desktop, 'use client'):
+  Componente <CustomCursor /> · div circular 20px · borde gold · mix-blend-mode difference
+  useMotionValue(x, y) + useSpring para suavidad
+  Importado en layout.tsx
+
+Smooth scroll (next.config.ts):
+  No hace falta librería. Agregar en globals.css:
+  html { scroll-behavior: smooth; }
+  Cada sección con className="scroll-mt-20" (offset navbar 80px)
+
+────────────────────────────────────────────────────────────────────────────────
+15. TAILWIND CONFIG COMPLETO (tailwind.config.ts)
+────────────────────────────────────────────────────────────────────────────────
+
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        navy:          '#0D1B2A',
+        'navy-mid':    '#1A2E45',
+        'navy-dark':   '#07111B',
+        blue:          '#1B4F8A',
+        'blue-light':  '#2D7DD2',
+        gold:          '#F5A623',
+        'gold-light':  '#FFB84D',
+        accent:        '#FF6B2B',
+        'gray-light':  '#F0F4F8',
+        'gray-text':   '#8A9BB0',
+      },
+      fontFamily: {
+        display:   ['var(--font-bebas)', 'sans-serif'],
+        condensed: ['var(--font-barlow)', 'sans-serif'],
+        body:      ['var(--font-dmsans)', 'sans-serif'],
+        mono:      ['var(--font-jetbrains)', 'monospace'],
+      },
+      backgroundImage: {
+        'gradient-hero': 'linear-gradient(135deg,#0D1B2A 0%,#1A2E45 50%,#0D1B2A 100%)',
+        'gradient-gold': 'linear-gradient(90deg,#F5A623,#FF6B2B)',
+        'gradient-blue': 'linear-gradient(135deg,#1B4F8A,#2D7DD2)',
+      },
+      animation: {
+        'float':       'float 4s ease-in-out infinite',
+        'marquee':     'marquee 20s linear infinite',
+        'bounce-slow': 'bounce-slow 2s ease-in-out infinite',
+        'pulse-gold':  'pulse-gold 2s ease-in-out infinite',
+      },
+      keyframes: {
+        float:       { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-12px)' } },
+        marquee:     { from:{ transform:'translateX(0)' }, to:{ transform:'translateX(-50%)' } },
+        'bounce-slow':{ '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(8px)' } },
+        'pulse-gold': { '0%,100%':{ boxShadow:'0 0 0 0 rgba(245,166,35,0.4)' },
+                        '50%':{ boxShadow:'0 0 0 12px rgba(245,166,35,0)' } },
+      },
+      transitionDuration: { '350': '350ms', '400': '400ms' },
+    },
+  },
+  plugins: [],
+}
+export default config
+
+────────────────────────────────────────────────────────────────────────────────
+16. RESPONSIVIDAD — BREAKPOINTS TAILWIND
+────────────────────────────────────────────────────────────────────────────────
+
+Usar los breakpoints nativos de Tailwind (mobile-first):
+  sm: 640px · md: 768px · lg: 1024px · xl: 1280px · 2xl: 1536px
+
+Patrones frecuentes en este proyecto:
+
+  Grids de servicios:
+    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+
+  Layout 2 columnas (hero/quiénes/contacto):
+    grid-cols-1 lg:grid-cols-2
+
+  Tipografía responsive:
+    Título hero     : text-5xl md:text-7xl lg:text-9xl
+    Títulos sección : text-4xl md:text-5xl lg:text-7xl
+    Subtítulos card : text-lg md:text-xl
+    Cuerpo          : text-sm md:text-base
+
+  Padding secciones:
+    py-16 md:py-20 lg:py-32
+    px-4 sm:px-6 lg:px-8
+
+  Navbar mobile: hamburger visible con md:hidden · menú oculto con hidden md:flex
+
+  Imágenes: usar sizes prop en next/image para optimización:
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+
+────────────────────────────────────────────────────────────────────────────────
+17. ARCHIVOS EN /public/ (Next.js)
+────────────────────────────────────────────────────────────────────────────────
+
+Colocar en la carpeta /public/ del proyecto Next.js:
+
+  /public/
+    logo_emg.png         ← Logo recortado sin fondo (extraído del PDF)
+    hero_bg.jpg          ← Ingeniero en torres / montaña (página 1 PDF)
+    workers.jpg          ← Equipo en campo (página 2 PDF)
+    tower.jpg            ← Torres de transmisión (páginas 3–4 PDF)
+    grid-pattern.svg     ← SVG de cuadrícula de ingeniería (generar inline o como SVG)
+    logo_electropuno.png ← Logo cliente Electro Puno S.A.A.
+    logo_redesur.png     ← Logo cliente REDESUR
+    logo_cd.png          ← Logo cliente CD
+    logo_ecoing.png      ← Logo cliente ECOING
+
+Referenciados en componentes como:
+  <Image src="/logo_emg.png" ... />  (Next.js resuelve /public automáticamente)
+
+Si alguna imagen no está disponible, usar placeholders:
+  <div className="bg-navy-mid rounded-xl flex items-center justify-center
+                  text-gray-text font-condensed text-sm uppercase tracking-widest">
+    [Imagen aquí]
+  </div>
+
+next.config.ts — activar optimización de imágenes:
+  const nextConfig = {
+    images: {
+      formats: ['image/avif', 'image/webp'],
+    },
+  }
+  export default nextConfig
+
+────────────────────────────────────────────────────────────────────────────────
+18. CALIDAD, PERFORMANCE Y ESTÁNDARES FINALES
+────────────────────────────────────────────────────────────────────────────────
+
+✅ STACK DEFINITIVO:
+   - Next.js 14 con App Router (RSC por defecto · 'use client' solo donde hay estado/animaciones)
+   - TypeScript estricto (tsconfig strict: true)
+   - Tailwind CSS v3 con tailwind.config.ts personalizado
+   - Framer Motion v11 para todas las animaciones
+   - Lucide React para íconos (consistentes y ligeros)
+   - next/image para imágenes (lazy load, WebP/AVIF, optimización automática)
+   - next/font para fuentes (zero layout shift, autohost)
+   - React Hook Form + Zod para el formulario
+
+✅ ARQUITECTURA DE COMPONENTES:
+   - Server Components por defecto (SEO, performance)
+   - 'use client' solo en: Navbar (scroll state), Hero (parallax),
+     StatCounter (counter animation), Contacto (formulario), CustomCursor
+   - Datos estáticos (servicios, pilares, stats) en /data/*.ts (no fetching)
+
+✅ SEO (app/layout.tsx · export const metadata):
+   title: 'Group EMG Perú | Ingeniería Eléctrica de Alta Tensión'
+   description: 'Soluciones especializadas en líneas de transmisión...'
+   keywords: 'ingeniería eléctrica, transmisión, subestaciones, Juliaca, Perú'
+   openGraph: imagen, título, descripción
+   viewport: width=device-width, initial-scale=1
+
+✅ ACCESIBILIDAD:
+   - Todos los <Image> con alt descriptivo
+   - aria-label en botones con solo icono
+   - Contraste WCAG AA mínimo en texto
+   - focus-visible en todos los elementos interactivos (Tailwind: focus-visible:ring-2)
+   - Skip-to-content link al inicio del layout
+
+✅ PERFORMANCE:
+   - Hero image con priority={true} en next/image
+   - Resto de imágenes: loading="lazy" (default en next/image)
+   - Framer Motion: lazy import con dynamic() para reducir bundle inicial
+     const MotionDiv = dynamic(() => import('framer-motion').then(m => m.motion.div))
+   - No CSS-in-JS · todo Tailwind (zero runtime styles)
+
+✅ ESTÉTICA FINAL A LOGRAR:
+   La página debe verse como el sitio web de una empresa de ingeniería
+   eléctrica de primer nivel: oscura, poderosa, confiable, tecnológica.
+   Como si Schneider Electric o ABB tuvieran una filial peruana con identidad
+   propia. NO genérica. NO plantilla de WordPress. NO dashboard template.
+   Cada sección tiene personalidad. El dorado irradia energía. El navy
+   transmite solidez. Las animaciones de Framer Motion son fluidas y 60fps.
+   El scroll es una experiencia cinematográfica, no solo desplazamiento.
+
+================================================================================
+  FIN DEL PROMPT — GROUP EMG PERÚ LANDING PAGE
+  Stack: Next.js 14 · Tailwind CSS · Framer Motion · TypeScript
+  Versión 2.0 · Mayo 2025
+  Prompt preparado para Claude, GPT-4o o cualquier LLM de código
+================================================================================

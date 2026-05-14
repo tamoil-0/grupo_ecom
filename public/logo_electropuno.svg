@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80">
+  <g transform="translate(15,15)">
+    <circle cx="25" cy="25" r="22" fill="none" stroke="#1B4F8A" stroke-width="3"/>
+    <path d="M 15,15 L 35,25 L 15,35 Z" fill="#F5A623"/>
+    <text x="55" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">ELECTRO</text>
+    <text x="55" y="38" font-family="Arial Black, sans-serif" font-size="16" font-weight="900" fill="#F5A623">PUNO</text>
+    <text x="55" y="52" font-family="Arial, sans-serif" font-size="7" fill="#1B4F8A" letter-spacing="2">S.A.A.</text>
+  </g>
+</svg>
